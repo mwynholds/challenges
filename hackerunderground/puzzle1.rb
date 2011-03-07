@@ -1,0 +1,49 @@
+@code = <<EOF
+8fc42c6ddf9966db3b09e84365034357
+2fa47f7c65fec19cc163b195725e3844
+8bf8854bebe108183caeb845c7676ae4
+9e925e9341b490bfd3b4c4ca3b0c1ef2
+b45cffe084dd3d20d928bee85e7b0f21
+df491a4de50739fa9cffdbd4e3f4b4bb
+639bae9ac6b3e1a84cebb7b403297b79
+600d6af0f320a021dc494cfa2daca569
+c68271a63ddbc431c307beb7d2918275
+a181a603769c1f98ad927e7367c7aa51
+8bf8854bebe108183caeb845c7676ae4
+8fc42c6ddf9966db3b09e84365034357
+717e5e6763efa99e70c9069f3e621fcb
+be5d5d37542d75f93a87094459f76678
+f792d1afb0399dce47533bead9d71a8a
+8fc42c6ddf9966db3b09e84365034357
+89759e1284e2479b991d2669de104942
+7f021a1415b86f2d013b2618fb31ae53
+01b6e20344b68835c5ed1ddedf20d531
+7f021a1415b86f2d013b2618fb31ae53
+be5d5d37542d75f93a87094459f76678
+851f5ac9941d720844d143ed9cfcf60a
+0d149b90e7394297301c90191ae775f0
+23a58bf9274bedb19375e527a0744fa9
+8fc42c6ddf9966db3b09e84365034357
+c47d187067c6cf953245f128b5fde62a
+0b08bd98d279b88859b628cd8c061ae0
+EOF
+
+require 'digest/md5'
+
+@hashes = {}
+File.open './corncob_lowercase.txt', 'r' do |file|
+  file.each_line do |line|
+    line = line.strip
+    if line.length <= 6
+      digest = Digest::MD5.hexdigest(line)
+      @hashes[digest] = line
+    end
+  end
+end
+
+@code.each_line do |line|
+  print @hashes[line.strip] || '*'
+  print " "
+end
+
+puts ""
