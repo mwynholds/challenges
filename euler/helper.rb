@@ -1,32 +1,11 @@
 class Helper
 
   def self.sum_divisors(n)
-    sum = 1
-    sqrt = Math.sqrt(n).to_i
-    2.upto(sqrt) do |i|
-      if n % i == 0
-        if i == n/i
-          sum += i
-        else
-          sum += (i + n/i)
-        end
-      end
-    end
-    sum
+    n.divisors.inject(0, :+)
   end
 
   def self.is_prime(n)
-    @@is_prime_cache ||= []
-    return @@is_prime_cache[n] if @@is_prime_cache[n]
-
-    return false if n == 0 || n == 1
-
-    sqrt = Math.sqrt(n.abs).to_i
-    2.upto(sqrt) do |i|
-      return false if n % i == 0
-    end
-
-    true
+    n.prime?
   end
 
   def self.bang(n)
@@ -79,44 +58,70 @@ class Helper
 
 end
 
+class Integer
+  def divisors
+    sqrt = Math.sqrt(self).to_i
+    divisors = [1]
+    2.upto(sqrt) do |i|
+      if self % i == 0
+        j = self / i
+        divisors << i
+        divisors << j unless i == j
+      end
+    end
+    divisors.sort
+  end
+
+  def prime_divisors
+    divisors.select {|i| i.prime?}
+  end
+
+  def prime?
+    return false if self == 0 || self == 1
+    @@primes ||= []
+    return @@primes[self] if @@primes[self]
+
+    sqrt = Math.sqrt(self.abs).to_i
+    2.upto(sqrt) do |i|
+      if self % i == 0
+        @@primes[self] = false
+        return false
+      end
+    end
+
+    @@primes[self] = true
+    true
+  end
+end
+
 class Array
+  def each_permutation(&block)
+    a = []
+    self.each do |c|
+      a.push(c)
+    end
+    n = a.length
+    p = Array.new(n+1,0)
+    i = 1
 
-    def each_permutation(&block)
+    block.call(a)
 
-        a = []
-        self.each do |c|
-            a.push(c)
-        end
-        n = a.length
-        p = Array.new(n+1,0)
+    while i < n do
+      if p[i] < i
+        j = 0
+        j = p[i] if (i % 2) == 1
+        t = a[j]
+        a[j] = a[i]
+        a[i] = t
+
+        p[i] = p[i] + 1
         i = 1
 
         block.call(a)
-
-        while i < n do
-
-            if p[i] < i
-
-                j = 0
-                j = p[i] if (i % 2) == 1
-                t = a[j]
-                a[j] = a[i]
-                a[i] = t
-
-                p[i] = p[i] + 1
-                i = 1
-
-                block.call(a)
-
-            else
-
-                p[i] = 0
-                i = i + 1
-
-            end
-
-        end
-
+      else
+        p[i] = 0
+        i = i + 1
+      end
     end
-
+  end
 end
