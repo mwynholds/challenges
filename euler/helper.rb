@@ -48,6 +48,10 @@ class Helper
     true
   end
 
+  def self.canonical_digits(n)
+    n.to_s.split(//).sort.to_s
+  end
+
   def self.ascii_sum(word)
     sum = 0
     0.upto(word.length - 1) do |i|
@@ -92,6 +96,14 @@ class Integer
     @@primes[self] = true
     true
   end
+
+  def next_prime
+    n = self
+    while n == self || !n.prime?
+      n = n + ( n <= 2 ? 1 : 2 )
+    end
+    n
+  end
 end
 
 class Array
@@ -123,5 +135,9 @@ class Array
         i = i + 1
       end
     end
+  end
+
+  def sum
+    self.reduce(0, :+)
   end
 end
