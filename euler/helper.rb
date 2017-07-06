@@ -45,7 +45,7 @@ class Helper
   end
 
   def self.canonical_digits(n)
-    n.to_s.split(//).sort.to_s
+    n.canonical_digits
   end
 
   def self.ascii_sum(word)
@@ -70,6 +70,10 @@ class Integer
       end
     end
     divisors.sort
+  end
+
+  def canonical_digits
+    self.to_s.split(//).sort.to_s
   end
 end
 
