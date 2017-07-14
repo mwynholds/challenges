@@ -75,6 +75,10 @@ class Integer
   def canonical_digits
     self.to_s.split(//).sort.to_s
   end
+
+  def fact
+    (1..self).reduce(:*) || 1
+  end
 end
 
 class Array
