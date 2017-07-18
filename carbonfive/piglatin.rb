@@ -15,7 +15,7 @@ class String
   def to_piglatin
     split(/ /).map do |word|
       next "" if word.length == 0
-      _, first, rest, punc = *(/^([^aeiouqAEIOUQ]*(?:[qQ][uU])?)([A-Za-z]*)(.*)$/.match word)
+      _, first, rest, punc = *(/^([^aeiouqAEIOUQ]*(?:[qQ][uU]?)?)([A-Za-z]*)(.*)$/.match word)
       pig = "#{rest}#{first}ay#{punc}"
       pig = pig.capitalize if first.cap?
       pig = pig.capitalize_all if word.all_cap?
@@ -46,6 +46,8 @@ class Piglatin
     assert "ickquay", "quick".to_piglatin
     assert "eezesquay", "squeeze".to_piglatin
     assert "ELLOHAY", "HELLO".to_piglatin
+    assert "ountqay", "qount".to_piglatin
+    assert "iay", "i".to_piglatin
     puts
   end
 end
