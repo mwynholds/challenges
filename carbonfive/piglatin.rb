@@ -4,7 +4,7 @@ class String
     length > 0 && self[0] =~ /[A-Z]/
   end
 
-  def to_pig_latin
+  def to_piglatin
     split(/ /).map do |word|
       next "" if word.length == 0
       _, first, rest, punc = *(/^(qu|[^aeiouAEIOU]*)([A-Za-z]*)(.*)$/.match word)
@@ -30,14 +30,14 @@ class Piglatin
   end
 
   def test
-    assert "ellohay", "hello".to_pig_latin
-    assert "applesay", "apples".to_pig_latin
-    assert "eatay orldway", "eat world".to_pig_latin
-    assert "Ellohay", "Hello".to_pig_latin
-    assert "Eatay", "Eat".to_pig_latin
-    assert "ellohay...  orldway?!", "hello...  world?!".to_pig_latin
-    assert "oolschay", "school".to_pig_latin
-    assert "ickquay", "quick".to_pig_latin
+    assert "ellohay", "hello".to_piglatin
+    assert "applesay", "apples".to_piglatin
+    assert "eatay orldway", "eat world".to_piglatin
+    assert "Ellohay", "Hello".to_piglatin
+    assert "Eatay", "Eat".to_piglatin
+    assert "ellohay...  orldway?!", "hello...  world?!".to_piglatin
+    assert "oolschay", "school".to_piglatin
+    assert "ickquay", "quick".to_piglatin
     puts
   end
 end
