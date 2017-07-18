@@ -4,18 +4,24 @@ class String
     length > 0 && self[0] =~ /[A-Z]/
   end
 
+  def all_cap?
+    split(//).all? { |c| c !~ /[a-z]/ }
+  end
+
+  def capitalize_all
+    split(//).map { |c| c.capitalize }.join ''
+  end
+
   def to_piglatin
     split(/ /).map do |word|
       next "" if word.length == 0
-      _, first, rest, punc = *(/^(qu|[^aeiouAEIOU]*)([A-Za-z]*)(.*)$/.match word)
+      _, first, rest, punc = *(/^([^aeiouqAEIOUQ]*(?:[qQ][uU])?)([A-Za-z]*)(.*)$/.match word)
       pig = "#{rest}#{first}ay#{punc}"
-      pig.capitalize! if first.cap?
+      pig = pig.capitalize if first.cap?
+      pig = pig.capitalize_all if word.all_cap?
       pig
     end.join ' '
   end
-
-  private
-
 
 end
 
@@ -38,6 +44,8 @@ class Piglatin
     assert "ellohay...  orldway?!", "hello...  world?!".to_piglatin
     assert "oolschay", "school".to_piglatin
     assert "ickquay", "quick".to_piglatin
+    assert "eezesquay", "squeeze".to_piglatin
+    assert "ELLOHAY", "HELLO".to_piglatin
     puts
   end
 end
