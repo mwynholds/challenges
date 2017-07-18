@@ -115,4 +115,19 @@ class Array
   def sum
     self.reduce(0, :+)
   end
+
+  def freq
+    each_with_object(Hash.new(0)){|key,hash| hash[key] += 1}
+  end
+end
+
+module Kernel
+  def assert(expected, actual)
+    if expected == actual
+      print '.'
+    else
+      puts
+      puts "Expected #{expected} but got #{actual}"
+    end
+  end
 end
