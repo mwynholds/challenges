@@ -63,6 +63,10 @@ class Integer
     to_s.split(//).map(&:to_i).sum
   end
 
+  def num_digits
+    to_s.length
+  end
+
   def divisors
     sqrt = Math.sqrt(self).to_i
     divisors = [1]
