@@ -59,6 +59,10 @@ class Helper
 end
 
 class Integer
+  def sum_digits
+    to_s.split(//).map(&:to_i).sum
+  end
+
   def divisors
     sqrt = Math.sqrt(self).to_i
     divisors = [1]
