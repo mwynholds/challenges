@@ -79,6 +79,14 @@ class Integer
   def fact
     (1..self).reduce(:*) || 1
   end
+
+  def palindrome?
+    to_s == reverse.to_s
+  end
+
+  def reverse
+    to_s.reverse.to_i
+  end
 end
 
 class Array
