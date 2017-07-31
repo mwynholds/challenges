@@ -95,6 +95,12 @@ class Integer
   def reverse
     to_s.reverse.to_i
   end
+
+  def primes_below
+    primes = [ 2 ]
+    primes << primes.last.next_prime until primes.last >= self
+    primes[0..-1]
+  end
 end
 
 class Array
@@ -126,10 +132,6 @@ class Array
         i = i + 1
       end
     end
-  end
-
-  def sum
-    self.reduce(0, :+)
   end
 
   def freq
