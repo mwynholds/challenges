@@ -92,6 +92,10 @@ class Integer
     to_s == reverse.to_s
   end
 
+  def permutation?(i)
+    self.to_s.split('').sort == i.to_s.split('').sort
+  end
+
   def reverse
     to_s.reverse.to_i
   end
