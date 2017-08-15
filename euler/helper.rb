@@ -1,3 +1,5 @@
+require 'parallel'
+
 class Helper
 
   def self.sum_divisors(n)
@@ -107,6 +109,13 @@ class Integer
   end
 end
 
+class Numeric
+  def square?
+    s = Math.sqrt self
+    s.floor == s
+  end
+end
+
 class Array
   def each_permutation(&block)
     a = []
@@ -140,6 +149,12 @@ class Array
 
   def freq
     each_with_object(Hash.new(0)){|key,hash| hash[key] += 1}
+  end
+end
+
+module Enumerable
+  def pmap
+    Parallel.map(self) { |o| yield o }
   end
 end
 

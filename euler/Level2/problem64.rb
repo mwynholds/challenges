@@ -1,4 +1,5 @@
 require '../helper'
+require '../continued_fraction'
 require 'bigdecimal'
 
 class Problem64
@@ -50,8 +51,7 @@ class Problem64
   def solve
     odd = []
     (2..10000).each do |n|
-    #(2..102).each do |n|
-      next if Math.sqrt(n) == Math.sqrt(n).floor
+      next if n.square?
 
       sequence = [ first(n) ]
       loop do
