@@ -1,4 +1,5 @@
 require '../helper'
+require 'set'
 
 class Primes
 
@@ -9,6 +10,52 @@ class Primes
 end
 
 class Integer
+  def self.all_primes
+    Enumerator.new do |yielder|
+      p = 2
+      loop do
+        yielder << p
+        p = p.next_prime
+      end
+    end
+  end
+
+  def prime_factors
+    return [1] if self == 1
+
+    @@prime_factors ||= []
+    return @@prime_factors[self] if @@prime_factors[self]
+
+    if self.prime?
+      @@prime_factors[self] = [self]
+      return @@prime_factors[self]
+    end
+
+    first_prime = Integer.all_primes.find { |p| self % p == 0 }
+    pfs = [first_prime] + (self / first_prime).prime_factors
+    @@prime_factors[self] = pfs
+    pfs
+  end
+
+  def relatively_prime_factors
+    self.prime_factors.freq.map { |factor, count| factor**count }
+  end
+
+  def relatively_prime_with(n)
+    Set.new(self.prime_factors).intersection(Set.new(n.prime_factors)).empty?
+  end
+
+  def totient
+    pfs = self.prime_factors
+    rpfs = self.relatively_prime_factors
+    if rpfs.length == 1
+      return self - 1 if self.prime?
+      return pfs.map.with_index { |pf, i| i == 0 ? pf-1 : pf }.reduce(1, &:*)
+    else
+      return rpfs.map { |rpf| rpf.totient }.reduce(1, &:*)
+    end
+  end
+
   def prime_divisors
     divisors.select {|i| i.prime?}
   end
