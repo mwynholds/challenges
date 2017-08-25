@@ -24,7 +24,7 @@ class Problem68
     solution_select ||= Proc.new { true }
     range = 1..sides*2
     inners = range.to_a.permutation(sides).select(&inner_select)
-    inners.map do |inner|
+    inners.pmap do |inner|
       available = range.to_a - inner
       outer = inner.map.with_index do |x, i|
         y = inner[(i+1)%sides]
@@ -38,7 +38,7 @@ class Problem68
     range = 1..sides*2
     min = range.first(3).sum
     max = range.last(3).sum
-    (min..max).map { |n| solve_for(sides, n, inner_select, solution_select) }.flatten.map(&:numeric).max
+    (min..max).pmap { |n| solve_for(sides, n, inner_select, solution_select) }.flatten.map(&:numeric).max
   end
 
   def solve
