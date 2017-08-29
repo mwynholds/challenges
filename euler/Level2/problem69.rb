@@ -15,16 +15,10 @@ class Problem69
   end
 
   def test
-    assert [13], 13.prime_factors.to_a
-    assert [2, 7], 14.prime_factors.to_a
+    assert [[13, 1]], 13.prime_factors.to_a
+    assert [[2, 1], [7, 1]], 14.prime_factors.to_a
     assert 2, 4.totient
     assert 6, 7.totient
-  end
-end
-
-class Integer
-
-  def relatively_prime
   end
 end
 

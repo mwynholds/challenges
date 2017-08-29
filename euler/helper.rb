@@ -94,8 +94,18 @@ class Integer
     to_s == reverse.to_s
   end
 
-  def permutation?(i)
+  def permutation2?(i)
     self.to_s.split('').sort == i.to_s.split('').sort
+  end
+
+  def permutation?(i)
+    idigits = i.digits
+    self.digits.each do |digit|
+      index = idigits.index digit
+      return false unless index
+      idigits.delete_at index
+    end
+    idigits.empty?
   end
 
   def reverse
@@ -155,6 +165,10 @@ end
 module Enumerable
   def pmap
     Parallel.map(self) { |o| yield o }
+  end
+
+  def pmap_with_index
+    Parallel.map_with_index(self) { |o, i| yield o, i }
   end
 end
 

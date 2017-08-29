@@ -1,5 +1,6 @@
 require '../helper'
 require 'set'
+require 'prime'
 
 class Primes
 
@@ -7,53 +8,43 @@ class Primes
     n.prime?
   end
 
+  def self.up_to(n)
+    Prime::EratosthenesGenerator.new.take_while { |p| p <= n }
+  end
+
 end
 
 class Integer
-  def self.all_primes
+  def multiples
     Enumerator.new do |yielder|
-      p = 2
+      count = 1
       loop do
-        yielder << p
-        p = p.next_prime
+        yielder << (self * count)
+        count += 1
       end
     end
   end
 
   def prime_factors
-    return [1] if self == 1
-
-    @@prime_factors ||= []
-    return @@prime_factors[self] if @@prime_factors[self]
-
-    if self.prime?
-      @@prime_factors[self] = [self]
-      return @@prime_factors[self]
-    end
-
-    first_prime = Integer.all_primes.find { |p| self % p == 0 }
-    pfs = [first_prime] + (self / first_prime).prime_factors
-    @@prime_factors[self] = pfs
-    pfs
-  end
-
-  def relatively_prime_factors
-    self.prime_factors.freq.map { |factor, count| factor**count }
-  end
-
-  def relatively_prime_with(n)
-    Set.new(self.prime_factors).intersection(Set.new(n.prime_factors)).empty?
+    Prime.prime_division self
   end
 
   def totient
-    pfs = self.prime_factors
-    rpfs = self.relatively_prime_factors
-    if rpfs.length == 1
-      return self - 1 if self.prime?
-      return pfs.map.with_index { |pf, i| i == 0 ? pf-1 : pf }.reduce(1, &:*)
-    else
-      return rpfs.map { |rpf| rpf.totient }.reduce(1, &:*)
+    self * ( prime_factors.map { |p, e| 1 - 1.0 / p }.reduce(1, &:*) )
+  end
+
+  def self.totients_up_to(n)
+    results = (1..n).to_a
+    primes = Primes.up_to n
+    primes.each do |prime|
+      prime.multiples.each do |m|
+        if m > n
+          break
+        end
+        results[m-1] = (results[m-1] / prime) * (prime - 1)
+      end
     end
+    [nil] + results
   end
 
   def prime_divisors
@@ -61,20 +52,7 @@ class Integer
   end
 
   def prime?
-    return false if self == 0 || self == 1
-    @@primes ||= []
-    return @@primes[self] if @@primes[self]
-
-    sqrt = Math.sqrt(self.abs).to_i
-    2.upto(sqrt) do |i|
-      if self % i == 0
-        @@primes[self] = false
-        return false
-      end
-    end
-
-    @@primes[self] = true
-    true
+    Prime.prime? self
   end
 
   def next_prime
