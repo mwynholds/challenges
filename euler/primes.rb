@@ -38,17 +38,16 @@ class Integer
   end
 
   def self.totients_up_to(n)
-    results = (1..n).to_a
+    results = (0..n).to_a
+    results[1] = 0
     primes = Primes.up_to n
     primes.each do |prime|
       prime.multiples.each do |m|
-        if m > n
-          break
-        end
-        results[m-1] = (results[m-1] / prime) * (prime - 1)
+        break if m > n
+        results[m] = (results[m] / prime) * (prime - 1)
       end
     end
-    [nil] + results
+    results
   end
 
   def prime_divisors
