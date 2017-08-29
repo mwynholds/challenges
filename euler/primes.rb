@@ -29,6 +29,10 @@ class Integer
     Prime.prime_division self
   end
 
+  def relatively_prime_factors
+    prime_factors.pmap { |p, e| p**e }
+  end
+
   def totient
     self * ( prime_factors.map { |p, e| 1 - 1.0 / p }.reduce(1, &:*) )
   end
