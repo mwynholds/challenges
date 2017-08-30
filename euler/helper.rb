@@ -90,6 +90,10 @@ class Integer
     (1..self).reduce(:*) || 1
   end
 
+  def fact_sum
+    digits.map(&:fact).sum
+  end
+
   def palindrome?
     to_s == reverse.to_s
   end
