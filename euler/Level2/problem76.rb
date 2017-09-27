@@ -4,11 +4,37 @@ class Problem76
 
   def initialize
     @found = 0
+    @cache = {}
   end
 
   def count(n)
     puts "counting for #{n}"
-    children(n, 1).sum { |child| count_pair(child) }
+
+    # the way i did it initially
+    # children(n, 1).sum { |child| count_pair(child) }
+
+    # after looking it up on wikipedia (https://en.wikipedia.org/wiki/Partition_(number_theory))
+    p(n) - 1
+  end
+
+  def p(n)
+    return 0 if n < 0
+    return 1 if n == 0
+    return @cache[n] if @cache[n]
+    sum = 0
+    m = 0
+    loop do
+      m += 1
+      c = m*(3*m-1)/2
+      m2 = -m
+      c2 = m2*(3*m2-1)/2
+      break if n-c < 0 && n-c2 < 0
+      sign = (-1)**(m-1)
+      sum += ( sign * p(n-c) ) + ( sign * p(n-c2) )
+    end
+    #puts "p(#{n}) = #{sum}"
+    @cache[n] = sum
+    sum
   end
 
   def count_pair(pair )
