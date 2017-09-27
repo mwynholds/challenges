@@ -1,4 +1,5 @@
 require 'parallel'
+require "#{__dir__}/integer"
 
 class Helper
 
@@ -58,76 +59,6 @@ class Helper
     sum
   end
 
-end
-
-class Integer
-  def sum_digits
-    to_s.split(//).map(&:to_i).sum
-  end
-
-  def num_digits
-    to_s.length
-  end
-
-  def divisors
-    sqrt = Math.sqrt(self).to_i
-    divisors = [1]
-    2.upto(sqrt) do |i|
-      if self % i == 0
-        j = self / i
-        divisors << i
-        divisors << j unless i == j
-      end
-    end
-    divisors.sort
-  end
-
-  def canonical_digits
-    self.to_s.split(//).sort.to_s
-  end
-
-  def fact
-    (1..self).reduce(:*) || 1
-  end
-
-  def fact_sum
-    digits.map(&:fact).sum
-  end
-
-  def palindrome?
-    to_s == reverse.to_s
-  end
-
-  def permutation2?(i)
-    self.to_s.split('').sort == i.to_s.split('').sort
-  end
-
-  def permutation?(i)
-    idigits = i.digits
-    self.digits.each do |digit|
-      index = idigits.index digit
-      return false unless index
-      idigits.delete_at index
-    end
-    idigits.empty?
-  end
-
-  def reverse
-    to_s.reverse.to_i
-  end
-
-  def primes_below
-    primes = [ 2 ]
-    primes << primes.last.next_prime until primes.last >= self
-    primes[0..-1]
-  end
-end
-
-class Numeric
-  def square?
-    s = Math.sqrt self
-    s.floor == s
-  end
 end
 
 class Array
