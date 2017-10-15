@@ -12,6 +12,34 @@ class Primes
     Prime::EratosthenesGenerator.new.take_while { |p| p <= n }
   end
 
+  def self.coprimes(even_odd = true, odd_odd = true)
+    current = [ ]
+    current << [2, 1] if even_odd
+    current << [3, 1] if odd_odd
+    Enumerator.new do |yielder|
+      loop do
+        first = current.shift
+        yielder << first
+        first.tap do |m, n|
+          [ [2*m-n, m], [2*m+n, m], [m+2*n, n] ].each do |(a, b)|
+            i = current.bsearch_index { |(c, d)| c+d > a+b } || -1
+            current.insert i, [a, b]
+          end
+        end
+      end
+    end
+  end
+
+  def self.primitive_pythagorian_triples
+    cps = coprimes true, false
+    Enumerator.new do |yielder|
+      loop do
+        (m, n) = cps.next
+        yielder << [ m**2-n**2, 2*m*n, m**2+n**2 ].sort
+      end
+    end
+  end
+
 end
 
 class Integer

@@ -116,4 +116,11 @@ module Kernel
       puts "Expected #{expected} but got #{actual}"
     end
   end
+
+  def time
+    start = Time.now
+    yield
+    elapsed = Time.now - start
+    puts "Elapsed time: #{elapsed * 1000}ms"
+  end
 end
