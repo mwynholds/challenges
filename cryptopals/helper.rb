@@ -1,4 +1,5 @@
 require "#{__dir__}/crypto"
+require "#{__dir__}/message"
 
 require 'base64'
 

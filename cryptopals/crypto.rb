@@ -11,21 +11,31 @@ class Crypto
     Base64.strict_encode64 bin
   end
 
-  def self.xor(bin1, bin2)
-    b1 = bin1.unpack "U*"
-    b2 = bin2.unpack "U*"
+  def self.single_chars
+    (?!..?~)
+  end
+
+  def self.xor(bin, key)
+    b1 = bin.each_byte.to_a
+    b2 = key.each_byte.to_a
     if b1.length > b2.length
-      b2 = ( b2 * ( b1.length / b2.length ) )[0, b1.length]
+      b2 = ( b2 * ( b1.length / b2.length + 1 ) )[0, b1.length]
     else
-      b1 = ( b1 * ( b2.length / b1.length ) )[0, b2.length]
+      b1 = ( b1 * ( b2.length / b1.length + 1 ) )[0, b2.length]
     end
     b1.zip(b2).map { |a,b| a^b }.pack "U*"
   end
 
-  def self.english?(str)
-    chars = str.split ''
-    spaces = chars.count { |c| c == ' ' } / ( chars.length * 1.0 )
-    letters = chars.count { |c| c =~ /[a-zA-Z]/ } / (chars.length * 1.0 )
-    return spaces > 0.1 && spaces < 0.25 && letters > 0.7
+  def self.english_score(bin)
+    score = 0
+    words = bin.split ' '
+    common = %w(a an the this I he she they am is was were be and or)
+    words.each do |word|
+      score += 10 if common.include?(word) || common.include?(word.capitalize)
+      score += 5  if word =~ /^[a-z0-9\,\.\;\:\'\"\!\&\(\)\-\_]+$/
+      score -= 5  if word !~ /[aeiouy]/
+      score -= 10 if word.length > 10
+    end
+    score
   end
 end
