@@ -10,12 +10,9 @@ class Problem7
     decipher = OpenSSL::Cipher.new 'AES-128-ECB'
     decipher.decrypt
     decipher.key = key
-    output = ""
-    DATA.readlines.each do |line|
-      message = Message.new base64: line.strip
-      decipher.update message.binary, output
-    end
-    output << decipher.final
+    input = DATA.readlines.map(&:strip).join('')
+    message = Message.new base64: input
+    output = decipher.update(message.binary) + decipher.final
     puts output
   end
 end
