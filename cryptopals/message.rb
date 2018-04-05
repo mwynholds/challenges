@@ -42,4 +42,9 @@ class Message
       { keysize: ks, avg: avg }
     end.min_by(n) { |o| o[:avg] }
   end
+
+  def pad(n)
+    padding = n - binary.length
+    binary + ( padding.chr * padding )
+  end
 end

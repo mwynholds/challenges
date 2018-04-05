@@ -1,6 +1,6 @@
 require '../helper'
 
-class Problem1
+class Problem9
   def test
   end
 
@@ -11,4 +11,4 @@ class Problem1
   end
 end
 
-Helper.run Problem1
+Helper.run Problem9
